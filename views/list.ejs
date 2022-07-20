@@ -1,0 +1,22 @@
+<%- include ("header.ejs")-%>
+<body>
+    <div class="box" id="heading">
+    <h1><%= listTitle %></h1>
+    </div>
+    <div class="box">
+        <form action="/delete" method="post">
+            <% newlistItem.forEach(function (item) {%>
+                <div class="item">
+                    <input type="checkbox" name="checkbox" onChange="this.form.submit()"/>
+                    <p><%=item.name %></p>
+                </div>
+            <%});%>
+        </form>
+
+            <form class="item" action="/" method="post">
+                <input type="text" name="newItem" placeholder="New item" autocomplete="off">
+                <button type="submit" name="button">+</button>
+            </form>
+    </div>
+</body>
+<%- include ("footer.ejs")-%>
