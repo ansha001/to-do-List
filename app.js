@@ -2,11 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const date = require(__dirname+"/date.js");
 const mongoose = require('mongoose');
+const dotenv = require("dotenv")
 
 const app = express();
+dotenv.config()
 
-const URL= `mongodb+srv://Ansha:ansha0000@cluster0.2wsz6he.mongodb.net/todoList?retryWrites=true&w=majority`;
-mongoose.connect(URL,{useNewUrlParser: true, useUnifiedTopology: true });
+const uri= `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.2wsz6he.mongodb.net/todoList?retryWrites=true&w=majority`;
+mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology: true });
 
 const items =['Item 1','Item 2','Item 3'];
 
@@ -68,7 +70,16 @@ app.post('/', function(req, res){
 })
 
 app.post('/delete', function(req, res){
-  console.log(req.body.checkbox);
+  const checkedItemId = req.body.checkbox;
+  Item.findByIdAndRemove(checkedItemId,function(err){
+    if(err){
+      console.log(err);
+    }
+    else{
+      console.log("Successfully deleted checked item");
+      res.redirect('/');
+    }
+  });
 })
 
 app.listen(3000, function(){
